@@ -75,23 +75,12 @@ router.put('/:id', auth, async (req, res) => {
 
 router.delete('/:id', auth, async (req, res) => {
   try {
-    console.log('Attempting to delete note:', {
-      id: req.params.id,
-      user: req.user.id,
-      time: new Date().toISOString()
-    });
 
     const note = await Note.findByIdAndDelete(req.params.id);
     
     if (!note) {
-      console.log('Note not found in database');
       return res.status(404).json({ message: 'Note not found' });
     }
-
-    console.log('Successfully deleted note:', {
-      id: note._id,
-      title: note.title
-    });
 
     res.json({ message: 'Note deleted' });
   } catch (error) {
