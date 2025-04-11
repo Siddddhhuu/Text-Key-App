@@ -6,6 +6,10 @@ function NoteList({ onNoteUpdated }) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingNote, setEditingNote] = useState(null);
+  const [keyInput, setKeyInput] = useState('');
+  const [showKeyPrompt, setShowKeyPrompt] = useState(false);
+  const [keyError, setKeyError] = useState('');
+  const [actionType, setActionType] = useState(''); // 'edit' or 'delete'
 
   const fetchNotes = async () => {
     try {
@@ -74,12 +78,55 @@ function NoteList({ onNoteUpdated }) {
 
   return (
     <div className="p-6">
-      {editingNote && (
+      {editingNote && !showKeyPrompt && (
         <EditNoteModal 
-        note={editingNote}
-        onSave={(updatedNote) => handleUpdate(updatedNote)}
-        onClose={() => setEditingNote(null)}
-      />
+          note={editingNote}
+          onSave={(updatedNote) => handleUpdate(updatedNote)}
+          onClose={() => setEditingNote(null)}
+        />
+      )}
+      {showKeyPrompt && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-lg font-bold mb-4">
+              {actionType === 'delete' ? 'Enter Key to Delete Note' : 'Enter Key to Edit Note'}
+            </h3>
+            <input
+              type="password"
+              value={keyInput}
+              onChange={(e) => setKeyInput(e.target.value)}
+              placeholder="Enter note key"
+              className="w-full p-2 border rounded mb-2"
+            />
+            {keyError && <p className="text-red-500 text-sm mb-2">{keyError}</p>}
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => {
+                  setShowKeyPrompt(false);
+                  setEditingNote(null);
+                }}
+                className="px-4 py-2 border rounded"
+              >
+                Cancel
+              </button>
+              <button
+                  onClick={() => {
+                    if (keyInput === editingNote.key) {
+                      setShowKeyPrompt(false);
+                      if (actionType === 'delete') {
+                        handleDelete(editingNote._id);
+                      }
+                    } else {
+                      setKeyError('Incorrect key');
+                    }
+                  }}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Verify
+              </button>
+            </div>
+          </div>
+        </div>
       )}
       <h2 className="text-2xl font-bold mb-4">Your Notes</h2>
       {notes.length === 0 ? (
@@ -100,13 +147,33 @@ function NoteList({ onNoteUpdated }) {
                 </div>
                 <div className="flex space-x-2">
                   <button 
-                    onClick={() => setEditingNote(note)}
+                    onClick={() => {
+                      if (note.key) {
+                        setShowKeyPrompt(true);
+                        setEditingNote(note);
+                        setKeyInput('');
+                        setKeyError('');
+                        setActionType('edit');
+                      } else {
+                        setEditingNote(note);
+                      }
+                    }}
                     className="bg-yellow-500 text-white px-3 py-1 rounded text-sm"
                   >
                     Edit
                   </button>
                   <button 
-                    onClick={() => handleDelete(note._id)}
+                    onClick={() => {
+                      if (note.key) {
+                        setShowKeyPrompt(true);
+                        setEditingNote(note);
+                        setKeyInput('');
+                        setKeyError('');
+                        setActionType('delete');
+                      } else {
+                        handleDelete(note._id);
+                      }
+                    }}
                     className="bg-red-500 text-white px-3 py-1 rounded text-sm"
                   >
                     Delete
