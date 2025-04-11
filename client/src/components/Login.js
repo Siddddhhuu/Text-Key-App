@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import api from '../api';
+import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 
 function Login() {
@@ -8,16 +9,16 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await api.post("/auth/login", { email, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/notes');
-    } catch (error) {
-      alert(error.response.data.message);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await api.post("/auth/login", { email, password });
+    localStorage.setItem('token', res.data.token);
+    navigate('/notes');
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Login failed');
+  }
+};
 
   return (
     <div className="flex items-center justify-center h-screen">

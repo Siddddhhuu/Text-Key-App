@@ -16,7 +16,8 @@ function Signup() {
       await api.post("/auth/signup", { username, email, password });
       navigate('/');
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error('Signup API error:', error.response || error);
+      toast.error(error.response?.data?.message || 'Signup failed');
     }
   };
 
