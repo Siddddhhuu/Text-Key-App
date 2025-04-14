@@ -141,7 +141,7 @@ function NoteList({ onNoteUpdated }) {
                   <p className="mt-2">{note.content}</p>
                   {note.key && (
                     <p className="mt-1 text-sm text-gray-500">
-                      Key: {note.key.substring(0, 2)}*****
+                      Key: {note.key.substring(0, 0)}*****
                     </p>
                   )}
                 </div>

@@ -26,7 +26,7 @@ function NoteForm() {
   return (
     <div className="p-6">
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-lg max-w-lg mx-auto">
-        <h2 className="text-2xl font-bold mb-4">Add Note/Key</h2>
+        <h2 className="text-2xl font-bold mb-4">Add Key</h2>
         <input
           type="text"
           placeholder="Title"

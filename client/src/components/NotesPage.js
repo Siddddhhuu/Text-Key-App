@@ -23,7 +23,7 @@ function NotesPage() {
     <div className="space-y-8">
       <nav className="bg-gray-800 text-white p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">My Notes App</h1>
+          <h1 className="text-xl font-bold">Key Store App</h1>
           <button 
             onClick={handleLogout}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition-colors"
@@ -36,7 +36,7 @@ function NotesPage() {
       <NoteList key={refreshKey} onNoteAdded={handleNoteAdded} />
       <footer className="bg-gray-800 text-white p-4 mt-8">
         <div className="container mx-auto text-center">
-          <p>&copy; {new Date().getFullYear()} My Notes App. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Key Store App. All rights reserved.</p>
         </div>
       </footer>
     </div>
